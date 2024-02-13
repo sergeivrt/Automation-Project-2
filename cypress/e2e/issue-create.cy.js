@@ -14,31 +14,19 @@ describe("Issue create", () => {
   });
 
   it("Should create an issue and validate it successfully", () => {
-    // System finds modal for creating issue and does next steps inside of it
     cy.get('[data-testid="modal:issue-create"]').within(() => {
-      // Type value to description input field
       cy.get(".ql-editor").type("TEST_DESCRIPTION");
       cy.get(".ql-editor").should("have.text", "TEST_DESCRIPTION");
-
-      // Type value to title input field
-      // Order of filling in the fields is first description, then title on purpose
-      // Otherwise filling title first sometimes doesn't work due to web page implementation
       cy.get('input[name="title"]').type("TEST_TITLE");
       cy.get('input[name="title"]').should("have.value", "TEST_TITLE");
-
-      // Open issue type dropdown and choose Story
       cy.get('[data-testid="select:type"]').click();
       cy.get('[data-testid="select-option:Story"]')
         .wait(1000)
         .trigger("mouseover")
         .trigger("click");
       cy.get('[data-testid="icon:story"]').should("be.visible");
-
-      // Select Lord Gaben from assignee dropdown
       cy.get('[data-testid="select:userIds"]').click();
       cy.get('[data-testid="select-option:Lord Gaben"]').click();
-
-      // Click on button "Create issue"
       cy.get('button[type="submit"]').click();
     });
 
@@ -99,7 +87,7 @@ describe("Issue create", () => {
     openIssueCreateModal();
   });
 
-  it("Should create an issue BUG!, Reporter Pickle Rick Highest Priority ", () => {
+  it("Test Case 1: Custom Issue Creation ", () => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       cy.get(".ql-editor").type("My bug description");
       cy.get(".ql-editor").should("have.text", "My bug description");
@@ -115,6 +103,34 @@ describe("Issue create", () => {
       cy.get('[data-testid="select-option:Pickle Rick"]').click();
       cy.get('[data-testid="select:priority"]').click();
       cy.get('[data-testid="select-option:Highest"]').click();
+      cy.get('button[type="submit"]').click();
+    });
+  });
+});
+
+describe("Issue create", () => {
+  beforeEach(() => {
+    openIssueCreateModal();
+  });
+
+  it("Test Case 2: Random Data Plugin Issue Creation", () => {
+    const bugTitle = faker.lorem.words();
+    const bugDescription = faker.lorem.paragraph();
+    cy.get('[data-testid="modal:issue-create"]').within(() => {
+      cy.get(".ql-editor").type(bugDescription);
+      cy.get(".ql-editor").shouldshould("have.text", bugDescription);
+      cy.get('input[name="title"]').type(bugTitle);
+      cy.get('input[name="title"]').should("have.value", bugTitle);
+      cy.get('[data-testid="select:type"]').click();
+      cy.get('[data-testid="select-option:Task"]')
+        .wait(1000)
+        .trigger("mouseover")
+        .trigger("click");
+      cy.get('[data-testid="icon:Task"]').should("be.visible");
+      cy.get('[data-testid="select:reporterId"]').click();
+      cy.get('[data-testid="select-option:“Baby Yoda"]').click();
+      cy.get('[data-testid="select:priority"]').click();
+      cy.get('[data-testid="select-option:Low"]').click();
       cy.get('button[type="submit"]').click();
     });
   });
