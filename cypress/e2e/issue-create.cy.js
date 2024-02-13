@@ -100,35 +100,21 @@ describe("Issue create", () => {
   });
 
   it("Should create an issue BUG!, Reporter Pickle Rick Highest Priority ", () => {
-    // System finds modal for creating issue and does next steps inside of it
     cy.get('[data-testid="modal:issue-create"]').within(() => {
-      // Type value to description input field
       cy.get(".ql-editor").type("My bug description");
       cy.get(".ql-editor").should("have.text", "My bug description");
-
-      // Type value to title input field
-      // Order of filling in the fields is first description, then title on purpose
-      // Otherwise filling title first sometimes doesn't work due to web page implementation
       cy.get('input[name="title"]').type("Bug");
       cy.get('input[name="title"]').should("have.value", "Bug");
-
-      // Open issue type dropdown and choose Bug
       cy.get('[data-testid="select:type"]').click();
       cy.get('[data-testid="select-option:Bug"]')
         .wait(1000)
         .trigger("mouseover")
         .trigger("click");
       cy.get('[data-testid="icon:bug"]').should("be.visible");
-
-      // Select Pickle Rick from reporter dropdown
-      cy.get('[data-testid="select:reporter"]').click();
+      cy.get('[data-testid="select:reporterId"]').click();
       cy.get('[data-testid="select-option:Pickle Rick"]').click();
-
-      // Select Highest proprity
       cy.get('[data-testid="select:priority"]').click();
       cy.get('[data-testid="select-option:Highest"]').click();
-
-      // Click on button "Create issue"
       cy.get('button[type="submit"]').click();
     });
   });
