@@ -114,11 +114,11 @@ describe("Issue create", () => {
 
       // Open issue type dropdown and choose Bug
       cy.get('[data-testid="select:type"]').click();
-      cy.get('[data-testid="select-option:Bug"]')
+      cy.get('[data-testid="select-option:bug"]')
         .wait(1000)
         .trigger("mouseover")
         .trigger("click");
-      cy.get('[data-testid="icon:Bug"]').should("be.visible");
+      cy.get('[data-testid="icon:bug"]').should("be.visible");
 
       // Select Pickle Rick from reporter dropdown
       cy.get('[data-testid="select:reporter"]').click();
