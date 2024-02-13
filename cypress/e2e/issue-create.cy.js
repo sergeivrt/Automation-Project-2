@@ -114,6 +114,7 @@ describe("Issue create", () => {
   });
 
   it("Test Case 2: Random Data Plugin Issue Creation", () => {
+    const faker = require('faker');
     const bugTitle = faker.lorem.words();
     const bugDescription = faker.lorem.paragraph();
     cy.get('[data-testid="modal:issue-create"]').within(() => {
