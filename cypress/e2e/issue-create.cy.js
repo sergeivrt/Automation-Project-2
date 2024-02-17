@@ -3,7 +3,6 @@ function openIssueCreateModal() {
   cy.url()
     .should("eq", `${Cypress.env("baseUrl")}project/board`)
     .then((url) => {
-      // System will already open issue creating modal in beforeEach block
       cy.visit(url + "/board?modal-issue-create=true");
     });
 }
@@ -105,6 +104,14 @@ describe("Issue create", () => {
       cy.get('[data-testid="select-option:Highest"]').click();
       cy.wait(5000);
       cy.get('button[type="submit"]').click();
+      cy.get('[data-testid="modal:issue-create"]').should("not.exist");
+      cy.contains("Issue has been successfully created.").should("be.visible");
+  
+      // Reload the page to be able to see recently created issue
+      // Assert that successful message has dissappeared after the reload
+      cy.reload();
+      cy.contains("Issue has been successfully created.").should("not.exist");
+  
     });
   });
 });
@@ -129,6 +136,14 @@ describe("Issue create", () => {
       cy.get('[data-testid="select-option:Low"]').click();
       cy.wait(5000);
       cy.get('button[type="submit"]').click();
+      cy.get('[data-testid="modal:issue-create"]').should("not.exist");
+      cy.contains("Issue has been successfully created.").should("be.visible");
+  
+      // Reload the page to be able to see recently created issue
+      // Assert that successful message has dissappeared after the reload
+      cy.reload();
+      cy.contains("Issue has been successfully created.").should("not.exist");
+  
     });
   });
 });
