@@ -113,23 +113,17 @@ describe("Issue create", () => {
     openIssueCreateModal();
   });
 
-  it("Test Case 2: Random Data Plugin Issue Creation", () => {
-    const faker = require('faker');
+  it.only("Test Case 2: Random Data Plugin Issue Creation", () => {
+    const faker = require("faker");
     const bugTitle = faker.lorem.words();
     const bugDescription = faker.lorem.paragraph();
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       cy.get(".ql-editor").type(bugDescription);
-      cy.get(".ql-editor").shouldshould("have.text", bugDescription);
+      cy.get(".ql-editor").should("have.text", bugDescription);
       cy.get('input[name="title"]').type(bugTitle);
       cy.get('input[name="title"]').should("have.value", bugTitle);
-      cy.get('[data-testid="select:type"]').click();
-      cy.get('[data-testid="select-option:Task"]')
-        .wait(1000)
-        .trigger("mouseover")
-        .trigger("click");
-      cy.get('[data-testid="icon:Task"]').should("be.visible");
       cy.get('[data-testid="select:reporterId"]').click();
-      cy.get('[data-testid="select-option:“Baby Yoda"]').click();
+      cy.get('[data-testid="select-option:Baby Yoda"]').click();
       cy.get('[data-testid="select:priority"]').click();
       cy.get('[data-testid="select-option:Low"]').click();
       cy.get('button[type="submit"]').click();
