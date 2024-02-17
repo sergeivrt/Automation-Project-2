@@ -102,6 +102,7 @@ describe("Issue create", () => {
       cy.get('[data-testid="select-option:Pickle Rick"]').click();
       cy.get('[data-testid="select:priority"]').click();
       cy.get('[data-testid="select-option:Highest"]').click();
+      cy.wait(1000);
       cy.get('button[type="submit"]').click();
     });
   });
@@ -125,7 +126,7 @@ describe("Issue create", () => {
       cy.get('[data-testid="select-option:Baby Yoda"]').click();
       cy.get('[data-testid="select:priority"]').click();
       cy.get('[data-testid="select-option:Low"]').click();
-      cy.wait(5000);
+      cy.wait(1000);
       cy.get('button[type="submit"]').click();
     });
   });
