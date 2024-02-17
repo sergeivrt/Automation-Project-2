@@ -103,6 +103,7 @@ describe("Issue create", () => {
       cy.get('[data-testid="select-option:Pickle Rick"]').click();
       cy.get('[data-testid="select:priority"]').click();
       cy.get('[data-testid="select-option:Highest"]').click();
+      cy.wait(5000);
       cy.get('button[type="submit"]').click();
     });
   });
@@ -113,10 +114,10 @@ describe("Issue create", () => {
     openIssueCreateModal();
   });
 
-  it.only("Test Case 2: Random Data Plugin Issue Creation", () => {
+  it("Test Case 2: Random Data Plugin Issue Creation", () => {
     const faker = require("faker");
-    const bugTitle = faker.lorem.words();
-    const bugDescription = faker.lorem.paragraph();
+    const bugTitle = faker.lorem.words(5);
+    const bugDescription = faker.lorem.paragraph(2);
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       cy.get(".ql-editor").type(bugDescription);
       cy.get(".ql-editor").should("have.text", bugDescription);
@@ -126,6 +127,7 @@ describe("Issue create", () => {
       cy.get('[data-testid="select-option:Baby Yoda"]').click();
       cy.get('[data-testid="select:priority"]').click();
       cy.get('[data-testid="select-option:Low"]').click();
+      cy.wait(5000);
       cy.get('button[type="submit"]').click();
     });
   });
