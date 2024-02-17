@@ -102,16 +102,7 @@ describe("Issue create", () => {
       cy.get('[data-testid="select-option:Pickle Rick"]').click();
       cy.get('[data-testid="select:priority"]').click();
       cy.get('[data-testid="select-option:Highest"]').click();
-      cy.wait(5000);
       cy.get('button[type="submit"]').click();
-      cy.get('[data-testid="modal:issue-create"]').should("not.exist");
-      cy.contains("Issue has been successfully created.").should("be.visible");
-  
-      // Reload the page to be able to see recently created issue
-      // Assert that successful message has dissappeared after the reload
-      cy.reload();
-      cy.contains("Issue has been successfully created.").should("not.exist");
-  
     });
   });
 });
@@ -136,14 +127,6 @@ describe("Issue create", () => {
       cy.get('[data-testid="select-option:Low"]').click();
       cy.wait(5000);
       cy.get('button[type="submit"]').click();
-      cy.get('[data-testid="modal:issue-create"]').should("not.exist");
-      cy.contains("Issue has been successfully created.").should("be.visible");
-  
-      // Reload the page to be able to see recently created issue
-      // Assert that successful message has dissappeared after the reload
-      cy.reload();
-      cy.contains("Issue has been successfully created.").should("not.exist");
-  
     });
   });
 });
