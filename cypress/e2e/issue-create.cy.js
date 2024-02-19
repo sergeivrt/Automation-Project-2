@@ -29,21 +29,16 @@ describe("Issue create", () => {
       cy.get('button[type="submit"]').click();
     });
 
-    // Assert that modal window is closed and successful message is visible
     cy.get('[data-testid="modal:issue-create"]').should("not.exist");
     cy.contains("Issue has been successfully created.").should("be.visible");
 
-    // Reload the page to be able to see recently created issue
-    // Assert that successful message has dissappeared after the reload
     cy.reload();
     cy.contains("Issue has been successfully created.").should("not.exist");
 
-    // Assert than only one list with name Backlog is visible and do steps inside of it
     cy.get('[data-testid="board-list:backlog"]')
       .should("be.visible")
       .and("have.length", "1")
       .within(() => {
-        // Assert that this list contains 5 issues and first element with tag p has specified text
         cy.get('[data-testid="list-issue"]')
           .should("have.length", "5")
           .first()
@@ -51,7 +46,6 @@ describe("Issue create", () => {
           .contains("TEST_TITLE")
           .siblings()
           .within(() => {
-            //Assert that correct avatar and type icon are visible
             cy.get('[data-testid="avatar:Lord Gaben"]').should("be.visible");
             cy.get('[data-testid="icon:story"]').should("be.visible");
           });
@@ -60,30 +54,19 @@ describe("Issue create", () => {
     cy.get('[data-testid="board-list:backlog"]')
       .contains("TEST_TITLE")
       .within(() => {
-        // Assert that correct avatar and type icon are visible
         cy.get('[data-testid="avatar:Lord Gaben"]').should("be.visible");
         cy.get('[data-testid="icon:story"]').should("be.visible");
       });
   });
 
   it("Should validate title is required field if missing", () => {
-    // System finds modal for creating issue and does next steps inside of it
     cy.get('[data-testid="modal:issue-create"]').within(() => {
-      // Try to click create issue button without filling any data
       cy.get('button[type="submit"]').click();
-
-      // Assert that correct error message is visible
       cy.get('[data-testid="form-field:title"]').should(
         "contain",
         "This field is required"
       );
     });
-  });
-});
-
-describe("Issue create", () => {
-  beforeEach(() => {
-    openIssueCreateModal();
   });
 
   it("Test Case 1: Custom Issue Creation ", () => {
@@ -106,13 +89,7 @@ describe("Issue create", () => {
       cy.get('button[type="submit"]').click();
     });
   });
-});
-
-describe("Issue create", () => {
-  beforeEach(() => {
-    openIssueCreateModal();
-  });
-
+  
   it("Test Case 2: Random Data Plugin Issue Creation", () => {
     const faker = require("faker");
     const bugTitle = faker.lorem.words(5);
