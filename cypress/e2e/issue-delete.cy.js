@@ -1,19 +1,41 @@
-import IssueModal from '../pages/IssueModal';
+import IssueModal from "../pages/IssueModal";
 
-describe('Issue Deletion', () => {
+describe("Issue Deletion", () => {
   beforeEach(() => {
-    cy.visit('/');
-    cy.url().should('eq', `${Cypress.env('baseUrl')}project`).then((url) => {
-      cy.visit(url + '/board');
-      cy.contains('This is an issue of type: Task.').click();
-    });
+    cy.visit("/");
+    cy.url()
+      .should("eq", `${Cypress.env("baseUrl")}project`)
+      .then((url) => {
+        cy.visit(url + "/board");
+        cy.contains("This is an issue of type: Task.").click();
+      });
   });
 
-  it('Should delete an issue', () => {
-    IssueModal.getIssueDetailModal().should('be.visible');
+  it("Should delete an issue", () => {
+    IssueModal.getIssueDetailModal().should("be.visible");
     IssueModal.clickDeleteButton();
     IssueModal.confirmDeletion();
+    IssueModal.validateIssueVisibilityState("This is an issue of type: Task.", false);
+  });
+});
 
-    IssueModal.validateIssueVisibilityState('Title of the issue', false);
+describe("Issue Deletion Cancellation", () => {
+  beforeEach(() => {
+    cy.visit("/");
+    cy.url()
+      .should("eq", `${Cypress.env("baseUrl")}project`)
+      .then((url) => {
+        cy.visit(url + "/board");
+        cy.contains("This is an issue of type: Task.").click();
+      });
+  });
+
+  it("Should delete an issue and cancel Confirmation", () => {
+    IssueModal.getIssueDetailModal().should("be.visible");
+    IssueModal.clickDeleteButton();
+    IssueModal.cancelDeletion();
+    cy.get('[data-testid="modal:confirmation-dialog"]').should("not.exist");
+    IssueModal.closeDetailModal();
+    IssueModal.validateIssueVisibilityState("This is an issue of type: Task.", true);
   });
 });
