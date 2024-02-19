@@ -4,8 +4,7 @@ describe("Issue Deletion", () => {
   beforeEach(() => {
     cy.visit("/");
     cy.url()
-      .should("eq", `${Cypress.env("baseUrl")}project`)
-      .then((url) => {
+      .should("eq", `${Cypress.env("baseUrl")}project`).then((url) => {
         cy.visit(url + "/board");
         cy.contains("This is an issue of type: Task.").click();
       });
@@ -19,17 +18,6 @@ describe("Issue Deletion", () => {
   });
 });
 
-describe("Issue Deletion Cancellation", () => {
-  beforeEach(() => {
-    cy.visit("/");
-    cy.url()
-      .should("eq", `${Cypress.env("baseUrl")}project`)
-      .then((url) => {
-        cy.visit(url + "/board");
-        cy.contains("This is an issue of type: Task.").click();
-      });
-  });
-
   it("Should delete an issue and cancel Confirmation", () => {
     IssueModal.getIssueDetailModal().should("be.visible");
     IssueModal.clickDeleteButton();
@@ -38,4 +26,3 @@ describe("Issue Deletion Cancellation", () => {
     IssueModal.closeDetailModal();
     IssueModal.validateIssueVisibilityState("This is an issue of type: Task.", true);
   });
-});
