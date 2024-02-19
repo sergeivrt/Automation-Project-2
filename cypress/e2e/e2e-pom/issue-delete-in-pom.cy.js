@@ -21,7 +21,7 @@ describe('Issue delete', () => {
     IssueModal.validateIssueVisibilityState(issueTitle, false);
   });
 
-  it.only('Should cancel deletion process successfully', () => {
+  it('Should cancel deletion process successfully', () => {
     IssueModal.getIssueDetailModal().should("be.visible");
     IssueModal.clickDeleteButton();
     IssueModal.cancelDeletion();
