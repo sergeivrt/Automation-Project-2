@@ -1,3 +1,5 @@
+import { faker } from "@faker-js/faker";
+
 function openIssueCreateModal() {
   cy.visit("/");
   cy.url()
@@ -69,6 +71,10 @@ describe("Issue create", () => {
     });
   });
 
+  const faker = require("faker");
+  const bugTitle = faker.lorem.words(5);
+  const bugDescription = faker.lorem.paragraph(2);
+
   it("Test Case 1: Custom Issue Creation ", () => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       cy.get(".ql-editor").type("My bug description");
@@ -89,11 +95,8 @@ describe("Issue create", () => {
       cy.get('button[type="submit"]').click();
     });
   });
-  
+
   it("Test Case 2: Random Data Plugin Issue Creation", () => {
-    const faker = require("faker");
-    const bugTitle = faker.lorem.words(5);
-    const bugDescription = faker.lorem.paragraph(2);
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       cy.get(".ql-editor").type(bugDescription);
       cy.get(".ql-editor").should("have.text", bugDescription);
