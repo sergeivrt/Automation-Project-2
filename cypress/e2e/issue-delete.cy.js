@@ -17,7 +17,7 @@ describe("Issue Deletion", () => {
     cy.contains("This is an issue of type: Task.").should("exist");
   });
 
-  it.("Should delete an issue", () => {
+  it("Should delete an issue", () => {
     cy.get('[data-testid="modal:issue-details"]').should("be.visible");
     cy.get('[data-testid="icon:trash"]').click();
     cy.get("button.sc-bwzfXH.dIxFno.sc-kGXeez.bLOzZQ").click();
