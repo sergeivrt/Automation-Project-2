@@ -71,7 +71,6 @@ describe('Issue comments creating, editing and deleting', () => {
 });
 
 ///Assignment 1
-
 describe('Assignment 1', () => {
     beforeEach(() => {
         cy.visit('/');
@@ -88,8 +87,9 @@ describe('Assignment 1', () => {
     const getAddCommentButton = () => cy.contains('button', 'Save');
     const getEditCommentButton = () => cy.get('[data-testid="issue-comment"]').first().contains('Edit');
     const getDeleteCommentButton = () => cy.get('[data-testid="issue-comment"]').contains('Delete');
+    const getCancelDeleteButton = () => cy.get('[data-testid="modal:confirm"]').contains('button', 'Cancel');
 
-    it('Should add, edit, and delete a comment', () => {
+    it('Should add, edit, cancel delete, and delete a comment', () => {
         // Add a comment
         getIssueDetailsModal().within(() => {
             cy.contains('Add a comment...').click();
@@ -106,13 +106,21 @@ describe('Assignment 1', () => {
             getAddCommentButton().click().should('not.exist');
             cy.get('[data-testid="issue-comment"]').should('contain', 'Edit').and('contain', MyEditedComment);
         });
+        
+        // Cancel delete the comment
+        getIssueDetailsModal().then(() => {
+            getDeleteCommentButton().click();
+            getCancelDeleteButton().click().should('not.exist');
+        });
+        getIssueDetailsModal().then(() => {
+            cy.get('[data-testid="issue-comment"]').should('contain', MyEditedComment);
+        });
 
         // Delete the comment
-       getIssueDetailsModal().then(() => {
-    getDeleteCommentButton().click();
-    cy.get('[data-testid="modal:confirm"]').contains('button', 'Delete comment').click().should('not.exist');
-    getIssueDetailsModal().find('[data-testid="issue-comment"]').contains(MyEditedComment).should('not.exist');
+        getIssueDetailsModal().then(() => {
+            getDeleteCommentButton().click();
+            cy.get('[data-testid="modal:confirm"]').contains('button', 'Delete comment').click().should('not.exist');
+            getIssueDetailsModal().find('[data-testid="issue-comment"]').contains(MyEditedComment).should('not.exist');
         });
     });
 });
-
