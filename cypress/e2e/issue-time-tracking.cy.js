@@ -32,7 +32,6 @@ describe("Time tracking", () => {
     clearTimeEstimationAndLog(initialEstimatedTime);
   });
 
-  // Helper functions
 
   const createIssue = (title) => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
