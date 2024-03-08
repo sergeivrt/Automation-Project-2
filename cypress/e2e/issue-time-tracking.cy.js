@@ -1,6 +1,5 @@
 /// ASSIGNMENT 6
 import { es, faker } from "@faker-js/faker";
-import IssueModal from "../../pages/IssueModal";
 
 describe("Time tracking", () => {
   const issueTitle = faker.lorem.words(4);
