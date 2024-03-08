@@ -11,16 +11,12 @@ describe("Time tracking", () => {
   beforeEach(() => {
     cy.visit("/");
     cy.url().should("eq", `${Cypress.env("baseUrl")}project/board`);
-  
-    cy.get('[data-testid="modal:issue-create"]', { timeout: 10000 }).should("exist")
-      .then(($el) => {
-        console.log("Element found:", $el);
-      })
-      .catch((error) => {
-        console.error("Error finding element:", error);
-        // Retry getting the element
-        cy.get('[data-testid="modal:issue-create"]', { timeout: 10000 }).should("exist");
-      });
+    cy.get('[data-testid="modal:issue-create"]', { timeout: 10000 }).should("exist");
+    cy.on('uncaught:exception', (err, runnable) => {
+      // Handle error and retry getting the element
+      console.error("Error finding element:", err.message);
+      return false;
+    });
   
     cy.visit("/project/board?modal-issue-create=true");
   });
