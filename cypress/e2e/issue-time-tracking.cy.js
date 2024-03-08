@@ -1,9 +1,8 @@
-/// Assignment 6
-// e2e/issue-time-tracking.cy.js
+/// ASSIGNMENT 6
 import { es, faker } from "@faker-js/faker";
 
 describe("Time tracking", () => {
-  const issueTitle = faker.lorem.words(2);
+  const issueTitle = faker.lorem.words(4);
   const initialEstimatedTime = 10;
   const updatedEstimatedTime = 20;
   const loggedTimeSpent = 2;
@@ -18,6 +17,7 @@ describe("Time tracking", () => {
 
   it("Should create issue and manipulate time estimation", () => {
     createIssue(issueTitle);
+    cy.reload();
     cy.contains(issueTitle).click();
     manipulateTimeEstimation(initialEstimatedTime, updatedEstimatedTime);
     manipulateTimeEstimation(updatedEstimatedTime, null);
@@ -26,6 +26,7 @@ describe("Time tracking", () => {
 
   it("Should create issue, add time estimation, and log/remove logged spent time on issue", () => {
     createIssue(issueTitle);
+    cy.reload();
     cy.contains(issueTitle).click();
     addTimeEstimationAndLog(loggedTimeSpent, loggedTimeRemaining, initialEstimatedTime);
     clearTimeEstimationAndLog(initialEstimatedTime);
