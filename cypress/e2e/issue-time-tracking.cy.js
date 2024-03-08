@@ -1,5 +1,6 @@
 /// ASSIGNMENT 6
 import { es, faker } from "@faker-js/faker";
+import IssueModal from "../../pages/IssueModal";
 
 describe("Time tracking", () => {
   const issueTitle = faker.lorem.words(4);
@@ -10,9 +11,11 @@ describe("Time tracking", () => {
 
   beforeEach(() => {
     cy.visit("/");
-    cy.url().then((url) => {
-      cy.visit(`${url}project/board?modal-issue-create=true`);
-    });
+    cy.url()
+      .should("eq", `${Cypress.env("baseUrl")}project/board`)
+      .then((url) => {
+        cy.visit(url + "/board?modal-issue-create=true");
+      });
   });
 
   it("Should create issue and manipulate time estimation", () => {
@@ -28,18 +31,21 @@ describe("Time tracking", () => {
     createIssue(issueTitle);
     cy.reload();
     cy.contains(issueTitle).click();
-    addTimeEstimationAndLog(loggedTimeSpent, loggedTimeRemaining, initialEstimatedTime);
+    addTimeEstimationAndLog(
+      loggedTimeSpent,
+      loggedTimeRemaining,
+      initialEstimatedTime
+    );
     clearTimeEstimationAndLog(initialEstimatedTime);
   });
 
-
   const createIssue = (title) => {
-    cy.get('[data-testid="modal:issue-create"]', { timeout: 60000 }).within(() => {
-      
-      
-      cy.get('input[name="title"]').type(title);
-      cy.get('button[type="submit"]').click();
-    });
+    cy.get('[data-testid="modal:issue-create"]', { timeout: 60000 }).within(
+      () => {
+        cy.get('input[name="title"]').type(title);
+        cy.get('button[type="submit"]').click();
+      }
+    );
   };
 
   const manipulateTimeEstimation = (initialValue, clearValue) => {
@@ -64,7 +70,7 @@ describe("Time tracking", () => {
     cy.get('[data-testid="modal:tracking"]').within(() => {
       cy.get('[placeholder="Number"]').eq(0).type(timeSpent);
       cy.get('[placeholder="Number"]').eq(1).type(timeRemaining);
-      cy.get('button').contains("Done").click();
+      cy.get("button").contains("Done").click();
     });
   };
   const clearTimeEstimationAndLog = (initialValue) => {
@@ -77,7 +83,7 @@ describe("Time tracking", () => {
       cy.get('[placeholder="Number"]').clear();
       cy.contains("No time logged").should("be.visible");
       cy.contains(initialValue + "h estimated").should("be.visible");
-      cy.get('button').contains("Done").click();
+      cy.get("button").contains("Done").click();
     });
   };
 });
