@@ -52,10 +52,10 @@ describe("Time tracking", () => {
         cy.wait(10000);
         cy.get('[data-testid="icon:stopwatch"]').click();
         if (initialValue !== null) {
-          cy.get('[placeholder="Number"]').clear({ force: true }).type(initialValue, { force: true });
+          cy.get('[placeholder="Number"]').eq(0).clear({ force: true }).type(initialValue, { force: true });
         }
         if (clearValue !== null) {
-          cy.get('[placeholder="Number"]').clear({ force: true });
+          cy.get('[placeholder="Number"]').eq(0).clear({ force: true });
         }
         cy.get('[data-testid="icon:close"]').click({ force: true });
       });
