@@ -10,16 +10,23 @@ describe("Time tracking", () => {
 
   beforeEach(() => {
     cy.visit("/");
-    cy.url()
-      .should("eq", `${Cypress.env("baseUrl")}project/board`)
-      .then((url) => {
-        cy.visit(url + "/board?modal-issue-create=true");
+    cy.url().should("eq", `${Cypress.env("baseUrl")}project/board`);
+  
+    cy.get('[data-testid="modal:issue-create"]', { timeout: 10000 }).should("exist")
+      .then(($el) => {
+        console.log("Element found:", $el);
+      })
+      .catch((error) => {
+        console.error("Error finding element:", error);
+        // Retry getting the element
+        cy.get('[data-testid="modal:issue-create"]', { timeout: 10000 }).should("exist");
       });
+  
+    cy.visit("/project/board?modal-issue-create=true");
   });
 
   it("Should create issue and manipulate time estimation", () => {
     createIssue(issueTitle);
-    cy.reload();
     cy.contains(issueTitle).click();
     manipulateTimeEstimation(initialEstimatedTime, updatedEstimatedTime);
     manipulateTimeEstimation(updatedEstimatedTime, null);
@@ -28,7 +35,6 @@ describe("Time tracking", () => {
 
   it("Should create issue, add time estimation, and log/remove logged spent time on issue", () => {
     createIssue(issueTitle);
-    cy.reload();
     cy.contains(issueTitle).click();
     addTimeEstimationAndLog(
       loggedTimeSpent,
@@ -72,6 +78,7 @@ describe("Time tracking", () => {
       cy.get("button").contains("Done").click();
     });
   };
+
   const clearTimeEstimationAndLog = (initialValue) => {
     cy.get('[data-testid="modal:issue-details"]').within(() => {
       cy.get('[data-testid="icon:stopwatch"]').click();
