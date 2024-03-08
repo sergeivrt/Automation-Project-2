@@ -1,92 +1,82 @@
 /// Assignment 6
 // e2e/issue-time-tracking.cy.js
+import { es, faker } from "@faker-js/faker";
 
-describe('Issue create', () => {
-    beforeEach(() => {
-      cy.visit('/');
-      cy.url().should('eq', `${Cypress.env('baseUrl')}project/board`).then((url) => {
-      //open isse creation modal  
-      cy.visit(url + '/board?modal-issue-create=true');
-      });
-    });
-  
-    //data set with which we are creating issue, saved as variable
-    const issueDetails = {
-      title: "TEST_TITLE",
-      type: "Bug",
-      description: "TEST_DESCRIPTION",
-      assignee: "Lord Gaben",
-    };
-  
-    //number of issues we expect to see in the backlog after the test
-    const EXPECTED_AMOUNT_OF_ISSUES = '5';
-  
-    it('Should create issue successfully', () => {
-      IssueModal.createIssue(issueDetails);
-      IssueModal.ensureIssueIsCreated(EXPECTED_AMOUNT_OF_ISSUES, issueDetails);
+describe("Time tracking", () => {
+  const issueTitle = faker.lorem.words(2);
+  const initialEstimatedTime = 10;
+  const updatedEstimatedTime = 20;
+  const loggedTimeSpent = 2;
+  const loggedTimeRemaining = 5;
+
+  beforeEach(() => {
+    cy.visit("/");
+    cy.url().then((url) => {
+      cy.visit(`${url}project/board?modal-issue-create=true`);
     });
   });
-  
 
-describe('Time Tracking Functionality', () => {
-    const TIME_ESTIMATION_FIELD = '[data-testid="original-estimate"]';
-    const TIME_TRACKING_SECTION = '[data-testid="time-tracking-section"]';
-    const TIME_LOGGING_DIALOG = '[data-testid="time-logging-dialog"]';
-    const TIME_SPENT_FIELD = '[data-testid="time-spent"]';
-    const TIME_REMAINING_FIELD = '[data-testid="time-remaining"]';
-    const DONE_BUTTON = 'button:contains("Done")';
+  it("Should create issue and manipulate time estimation", () => {
+    createIssue(issueTitle);
+    cy.contains(issueTitle).click();
+    manipulateTimeEstimation(initialEstimatedTime, updatedEstimatedTime);
+    manipulateTimeEstimation(updatedEstimatedTime, null);
+    manipulateTimeEstimation(null, null);
+  });
 
-   
+  it("Should create issue, add time estimation, and log/remove logged spent time on issue", () => {
+    createIssue(issueTitle);
+    cy.contains(issueTitle).click();
+    addTimeEstimationAndLog(loggedTimeSpent, loggedTimeRemaining, initialEstimatedTime);
+    clearTimeEstimationAndLog(initialEstimatedTime);
+  });
 
-    // Time Estimation Functionality
-    it('Time Estimation Functionality', () => {
-        const originalEstimate = '10';
-        const updatedEstimate = '20';
+  // Helper functions
 
-        // Adding estimation
-        cy.get(TIME_ESTIMATION_FIELD).type(originalEstimate);
+  const createIssue = (title) => {
+    cy.get('[data-testid="modal:issue-create"]').within(() => {
+      cy.get('input[name="title"]').type(title);
+      cy.get('button[type="submit"]').click();
+    });
+  };
 
-        // Asserting that the estimation is added and visible
-        cy.contains(TIME_TRACKING_SECTION, `Original Estimate: ${originalEstimate} hours`);
+  const manipulateTimeEstimation = (initialValue, clearValue) => {
+    cy.get('[data-testid="modal:issue-details"]').within(() => {
+      cy.get('[data-testid="icon:stopwatch"]').click();
+      if (initialValue !== null) {
+        cy.get('[placeholder="Number"]').clear().type(initialValue);
+      }
+      if (clearValue !== null) {
+        cy.get('[placeholder="Number"]').clear();
+      }
+      cy.get('[data-testid="icon:close"]').click();
+    });
+  };
 
-        // Editing the estimation
-        cy.get(TIME_ESTIMATION_FIELD).clear().type(updatedEstimate);
-
-        // Asserting that the updated value is visible
-        cy.contains(TIME_TRACKING_SECTION, `Original Estimate: ${updatedEstimate} hours`);
-
-        // Removing the estimation
-        cy.get(TIME_ESTIMATION_FIELD).clear();
-
-        // Asserting that the value is removed
-        cy.get(TIME_TRACKING_SECTION).should('not.contain', 'Original Estimate:');
+  const addTimeEstimationAndLog = (timeSpent, timeRemaining, initialValue) => {
+    cy.get('[data-testid="modal:issue-details"]').within(() => {
+      cy.get('[data-testid="icon:stopwatch"]').click();
+      cy.get('[placeholder="Number"]').type(initialValue);
     });
 
-    // Time Logging Functionality
-    it('Time Logging Functionality', () => {
-        const timeSpent = '2';
-        const timeRemaining = '5';
-
-        // Log time
-        cy.get(TIME_TRACKING_SECTION).click();
-        cy.get(TIME_LOGGING_DIALOG).within(() => {
-            cy.get(TIME_SPENT_FIELD).type(timeSpent);
-            cy.get(TIME_REMAINING_FIELD).type(timeRemaining);
-            cy.contains(DONE_BUTTON).click();
-        });
-
-        // Assert that time is logged
-        cy.get(TIME_TRACKING_SECTION).should('contain', `Spent Time: ${timeSpent} hours`);
-
-        // Remove logged time
-        cy.get(TIME_TRACKING_SECTION).click();
-        cy.get(TIME_LOGGING_DIALOG).within(() => {
-            cy.get(TIME_SPENT_FIELD).clear();
-            cy.get(TIME_REMAINING_FIELD).clear();
-            cy.contains(DONE_BUTTON).click();
-        });
-
-        // Assert that logged time is removed
-        cy.get(TIME_TRACKING_SECTION).should('contain', 'Original Estimate:');
+    cy.get('[data-testid="modal:tracking"]').within(() => {
+      cy.get('[placeholder="Number"]').eq(0).type(timeSpent);
+      cy.get('[placeholder="Number"]').eq(1).type(timeRemaining);
+      cy.get('button').contains("Done").click();
     });
+  };
+
+  const clearTimeEstimationAndLog = (initialValue) => {
+    cy.get('[data-testid="modal:issue-details"]').within(() => {
+      cy.get('[data-testid="icon:stopwatch"]').click();
+      cy.get('[placeholder="Number"]').clear();
+    });
+
+    cy.get('[data-testid="modal:tracking"]').within(() => {
+      cy.get('[placeholder="Number"]').clear();
+      cy.contains("No time logged").should("be.visible");
+      cy.contains(initialValue + "h estimated").should("be.visible");
+      cy.get('button').contains("Done").click();
+    });
+  };
 });
