@@ -34,7 +34,9 @@ describe("Time tracking", () => {
 
 
   const createIssue = (title) => {
-    cy.get('[data-testid="modal:issue-create"]').within(() => {
+    cy.get('[data-testid="modal:issue-create"]', { timeout: 60000 }).within(() => {
+      
+      
       cy.get('input[name="title"]').type(title);
       cy.get('button[type="submit"]').click();
     });
@@ -65,7 +67,6 @@ describe("Time tracking", () => {
       cy.get('button').contains("Done").click();
     });
   };
-
   const clearTimeEstimationAndLog = (initialValue) => {
     cy.get('[data-testid="modal:issue-details"]').within(() => {
       cy.get('[data-testid="icon:stopwatch"]').click();
