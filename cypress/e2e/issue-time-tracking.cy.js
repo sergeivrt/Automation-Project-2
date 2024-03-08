@@ -1,4 +1,5 @@
 /// ASSIGNMENT 6
+/// ASSIGNMENT 6
 import { es, faker } from "@faker-js/faker";
 
 describe("Time tracking", () => {
@@ -18,74 +19,73 @@ describe("Time tracking", () => {
         });
     });
 
-  it("Should create issue and manipulate time estimation", () => {
-    createIssue(issueTitle);
-    cy.contains(issueTitle).click();
-    manipulateTimeEstimation(initialEstimatedTime, updatedEstimatedTime);
-    manipulateTimeEstimation(updatedEstimatedTime, null);
-    manipulateTimeEstimation(null, null);
-  });
+    it("Should create issue and manipulate time estimation", () => {
+      createIssue(issueTitle);
+      cy.contains(issueTitle).click();
+      manipulateTimeEstimation(initialEstimatedTime, updatedEstimatedTime);
+      manipulateTimeEstimation(updatedEstimatedTime, null);
+      manipulateTimeEstimation(null, null);
+    });
 
-  it("Should create issue, add time estimation, and log/remove logged spent time on issue", () => {
-    createIssue(issueTitle);
-    cy.contains(issueTitle).click();
-    addTimeEstimationAndLog(
-      loggedTimeSpent,
-      loggedTimeRemaining,
-      initialEstimatedTime
-    );
-    clearTimeEstimationAndLog(initialEstimatedTime);
-  });
+    it("Should create issue, add time estimation, and log/remove logged spent time on issue", () => {
+      createIssue(issueTitle);
+      cy.contains(issueTitle).click();
+      addTimeEstimationAndLog(
+        loggedTimeSpent,
+        loggedTimeRemaining,
+        initialEstimatedTime
+      );
+      clearTimeEstimationAndLog(initialEstimatedTime);
+    });
 
-  const createIssue = (title) => {
-    cy.get('[data-testid="modal:issue-create"]'.within(
-      () => {
+    const createIssue = (title) => {
+      cy.get('[data-testid="modal:issue-create"]').within(() => {
         cy.wait(3000);
         cy.get('input[name="title"]').type(title);
         cy.get('button[type="submit"]').click();
         cy.wait(30000);
-      }
-    );
-  };
+      });
+    };
 
-  const manipulateTimeEstimation = (initialValue, clearValue) => {
-    cy.get('[data-testid="modal:issue-details"]').within(() => {
-      cy.wait(10000);
-      cy.get('[data-testid="icon:stopwatch"]').click();
-      if (initialValue !== null) {
-        cy.get('[placeholder="Number"]').clear().type(initialValue);
-      }
-      if (clearValue !== null) {
+    const manipulateTimeEstimation = (initialValue, clearValue) => {
+      cy.get('[data-testid="modal:issue-details"]').within(() => {
+        cy.wait(10000);
+        cy.get('[data-testid="icon:stopwatch"]').click();
+        if (initialValue !== null) {
+          cy.get('[placeholder="Number"]').clear().type(initialValue);
+        }
+        if (clearValue !== null) {
+          cy.get('[placeholder="Number"]').clear();
+        }
+        cy.get('[data-testid="icon:close"]').click();
+      });
+    };
+
+    const addTimeEstimationAndLog = (timeSpent, timeRemaining, initialValue) => {
+      cy.get('[data-testid="modal:issue-details"]').within(() => {
+        cy.get('[data-testid="icon:stopwatch"]').click();
+        cy.get('[placeholder="Number"]').type(initialValue);
+      });
+
+      cy.get('[data-testid="modal:tracking"]').within(() => {
+        cy.get('[placeholder="Number"]').eq(0).type(timeSpent);
+        cy.get('[placeholder="Number"]').eq(1).type(timeRemaining);
+        cy.get("button").contains("Done").click();
+      });
+    };
+
+    const clearTimeEstimationAndLog = (initialValue) => {
+      cy.get('[data-testid="modal:issue-details"]').within(() => {
+        cy.get('[data-testid="icon:stopwatch"]').click();
         cy.get('[placeholder="Number"]').clear();
-      }
-      cy.get('[data-testid="icon:close"]').click();
-    });
-  };
+      });
 
-  const addTimeEstimationAndLog = (timeSpent, timeRemaining, initialValue) => {
-    cy.get('[data-testid="modal:issue-details"]').within(() => {
-      cy.get('[data-testid="icon:stopwatch"]').click();
-      cy.get('[placeholder="Number"]').type(initialValue);
-    });
-
-    cy.get('[data-testid="modal:tracking"]').within(() => {
-      cy.get('[placeholder="Number"]').eq(0).type(timeSpent);
-      cy.get('[placeholder="Number"]').eq(1).type(timeRemaining);
-      cy.get("button").contains("Done").click();
-    });
-  };
-
-  const clearTimeEstimationAndLog = (initialValue) => {
-    cy.get('[data-testid="modal:issue-details"]').within(() => {
-      cy.get('[data-testid="icon:stopwatch"]').click();
-      cy.get('[placeholder="Number"]').clear();
-    });
-
-    cy.get('[data-testid="modal:tracking"]').within(() => {
-      cy.get('[placeholder="Number"]').clear();
-      cy.contains("No time logged").should("be.visible");
-      cy.contains(initialValue + "h estimated").should("be.visible");
-      cy.get("button").contains("Done").click();
-    });
-  };
+      cy.get('[data-testid="modal:tracking"]').within(() => {
+        cy.get('[placeholder="Number"]').clear();
+        cy.contains("No time logged").should("be.visible");
+        cy.contains(initialValue + "h estimated").should("be.visible");
+        cy.get("button").contains("Done").click();
+      });
+    };
+  });
 });
