@@ -8,18 +8,15 @@ describe("Time tracking", () => {
   const loggedTimeSpent = 2;
   const loggedTimeRemaining = 5;
 
-  beforeEach(() => {
-    cy.visit("/");
-    cy.url().should("eq", `${Cypress.env("baseUrl")}project/board`);
-    cy.get('[data-testid="modal:issue-create"]', { timeout: 10000 }).should("exist");
-    cy.on('uncaught:exception', (err, runnable) => {
-      // Handle error and retry getting the element
-      console.error("Error finding element:", err.message);
-      return false;
+  describe("Time tracking", () => {
+    beforeEach(() => {
+      cy.visit("/");
+      cy.url()
+        .should("eq", `${Cypress.env("baseUrl")}project/board`)
+        .then((url) => {
+          cy.visit(url + "/board?modal-issue-create=true");
+        });
     });
-  
-    cy.visit("/project/board?modal-issue-create=true");
-  });
 
   it("Should create issue and manipulate time estimation", () => {
     createIssue(issueTitle);
@@ -41,16 +38,19 @@ describe("Time tracking", () => {
   });
 
   const createIssue = (title) => {
-    cy.get('[data-testid="modal:issue-create"]', { timeout: 60000 }).within(
+    cy.get('[data-testid="modal:issue-create"]'.within(
       () => {
+        cy.wait(3000);
         cy.get('input[name="title"]').type(title);
         cy.get('button[type="submit"]').click();
+        cy.wait(30000);
       }
     );
   };
 
   const manipulateTimeEstimation = (initialValue, clearValue) => {
     cy.get('[data-testid="modal:issue-details"]').within(() => {
+      cy.wait(10000);
       cy.get('[data-testid="icon:stopwatch"]').click();
       if (initialValue !== null) {
         cy.get('[placeholder="Number"]').clear().type(initialValue);
