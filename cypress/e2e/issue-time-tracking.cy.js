@@ -43,7 +43,7 @@ describe("Time tracking", () => {
         cy.wait(3000);
         cy.get('input[name="title"]').type(title);
         cy.get('button[type="submit"]').click();
-        cy.wait(30000);
+        cy.wait(20000);
       });
     };
 
@@ -57,7 +57,7 @@ describe("Time tracking", () => {
         if (clearValue !== null) {
           cy.get('[placeholder="Number"]').clear({ force: true });
         }
-        cy.get('[data-testid="icon:close"]').click();
+        cy.get('[data-testid="icon:close"]').click({ force: true });
       });
     };
 
