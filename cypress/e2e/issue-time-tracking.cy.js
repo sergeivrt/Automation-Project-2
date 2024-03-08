@@ -9,9 +9,11 @@ describe("Time tracking - Add estimation", () => {
 
   beforeEach(() => {
     cy.visit("/");
-    cy.url().then((url) => {
-      cy.visit(`${url}project/board?modal-issue-create=true`);
-    });
+    cy.url()
+      .should("eq", `${Cypress.env("baseUrl")}project/board`)
+      .then((url) => {
+        cy.visit(url + "/board?modal-issue-create=true");
+      });
   });
 
   it("User can add estimation to issue", () => {
@@ -25,24 +27,23 @@ describe("Time tracking - Add estimation", () => {
 
   const createIssue = (title) => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
+      cy.wait(5000)
       cy.get('input[name="title"]').type(title);
       cy.get('button[type="submit"]').click();
     });
   };
 
-  const addEstimation = (estimation) => {
+  const addEstimation = (initialEstimation) => {
     cy.get('[data-testid="modal:issue-details"]').within(() => {
-      cy.get('[data-testid="icon:stopwatch"]').click();
-      cy.get('[placeholder="Number"]').type(estimation);
-      cy.get('[data-testid="icon:close"]').click();
+      cy.get('[placeholder="Number"]').type(initialEstimation);
     });
   };
 
-  const verifyEstimationSaved = (estimation) => {
+  const verifyEstimationSaved = (initialEstimation) => {
     cy.contains(issueTitle).click();
     cy.get('[data-testid="modal:issue-details"]').within(() => {
       cy.get('[data-testid="icon:stopwatch"]').click();
-      cy.get('[placeholder="Number"]').should("have.value", estimation);
+      cy.get('[placeholder="Number"]').should("have.value", initialEstimation);
       cy.get('[data-testid="icon:close"]').click();
     });
   };
