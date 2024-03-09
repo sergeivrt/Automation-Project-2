@@ -22,7 +22,6 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
      openIssueCreateModal();
         cy.wait(5000);
       });
-  
 
   it("TC1-TC3:User adds, updates, and removes estimation Time to the issue", () => {
     createIssue(issueTitle);
