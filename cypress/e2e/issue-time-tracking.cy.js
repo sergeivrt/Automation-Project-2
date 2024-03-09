@@ -1,5 +1,5 @@
-/// ASSIGNMENT 6
-/// ASSIGNMENT 6
+/// ASSIGNMENT 2
+
 import { es, faker } from "@faker-js/faker";
 
 describe("Time tracking - Add estimation, Update estimation, Remove estimation, Log time, Remove logged time ", () => {
@@ -20,7 +20,7 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
 
   it("TC1-TC3:User adds, updates, and removes estimation Time to the issue", () => {
     createIssue(issueTitle);
-    cy.wait(20000);
+    cy.wait(25000);
     cy.contains(issueTitle).click();
     addEstimation(initialEstimationValue);
     cy.wait(5000);
