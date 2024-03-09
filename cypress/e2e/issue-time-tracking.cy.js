@@ -18,8 +18,11 @@ describe("Time tracking - Add estimation", () => {
 
   it("User can add estimation to issue", () => {
     createIssue(issueTitle);
+    cy.wait(7000)
     cy.contains(issueTitle).click();
     addEstimation(initialEstimation);
+    cy.wait(7000)
+    cy.reload();
     verifyEstimationSaved(initialEstimation);
   });
 
@@ -27,7 +30,7 @@ describe("Time tracking - Add estimation", () => {
 
   const createIssue = (title) => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
-      cy.wait(5000)
+      cy.wait(1000)
       cy.get('input[name="title"]').type(title);
       cy.get('button[type="submit"]').click();
     });
@@ -36,13 +39,13 @@ describe("Time tracking - Add estimation", () => {
   const addEstimation = (initialEstimation) => {
     cy.get('[data-testid="modal:issue-details"]').within(() => {
       cy.get('[placeholder="Number"]').type(initialEstimation);
+      cy.get('[data-testid="icon:close"]').click();
     });
   };
 
   const verifyEstimationSaved = (initialEstimation) => {
     cy.contains(issueTitle).click();
     cy.get('[data-testid="modal:issue-details"]').within(() => {
-      cy.get('[data-testid="icon:stopwatch"]').click();
       cy.get('[placeholder="Number"]').should("have.value", initialEstimation);
       cy.get('[data-testid="icon:close"]').click();
     });
