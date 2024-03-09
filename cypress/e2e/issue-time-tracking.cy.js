@@ -9,15 +9,20 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
   const timeSpent = 2;
   const timeRemaining = 5;
 
-  beforeEach(() => {
+  function openIssueCreateModal() {
     cy.visit("/");
     cy.url()
       .should("eq", `${Cypress.env("baseUrl")}project/board`)
       .then((url) => {
         cy.visit(url + "/board?modal-issue-create=true");
+      });
+  }
+
+  beforeEach(() => {
+     openIssueCreateModal();
         cy.wait(5000);
       });
-  });
+  
 
   it("TC1-TC3:User adds, updates, and removes estimation Time to the issue", () => {
     createIssue(issueTitle);
