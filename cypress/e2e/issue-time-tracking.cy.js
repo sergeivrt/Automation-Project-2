@@ -37,7 +37,7 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
 
   it("TC4-TC5:User logs spent and remaining time and then removes logs to recently created issue", () => {
     createIssue(issueTitle);
-    cy.wait(20000);
+    cy.wait(25000);
     cy.contains(issueTitle).click();
     logTime(timeSpent, timeRemaining);
     verifyTimeLogged(timeSpent, timeRemaining);
