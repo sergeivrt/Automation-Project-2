@@ -3,11 +3,13 @@
 import { es, faker } from "@faker-js/faker";
 
 describe("Time tracking - Add estimation, Update estimation, Remove estimation, Log time, Remove logged time ", () => {
+
   const issueTitle = faker.lorem.words(4);
   const initialEstimationValue = 10;
   const updatedEstimationValue = 20;
   const timeSpent = 2;
   const timeRemaining = 5;
+
   beforeEach(() => {
     cy.visit("/");
     cy.url()
@@ -19,6 +21,7 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
   });
 
   it("TC1-TC3:User adds, updates, and removes estimation Time to the issue", () => {
+
     createIssue(issueTitle);
     cy.wait(25000);
     cy.contains(issueTitle).click();
@@ -36,6 +39,7 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
   });
 
   it("TC4-TC5:User logs spent and remaining time and then removes logs to recently created issue", () => {
+    
     createIssue(issueTitle);
     cy.wait(25000);
     cy.contains(issueTitle).click();
