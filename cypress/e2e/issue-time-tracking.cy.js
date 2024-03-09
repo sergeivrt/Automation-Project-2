@@ -3,7 +3,6 @@
 import { es, faker } from "@faker-js/faker";
 
 describe("Time tracking - Add estimation, Update estimation, Remove estimation, Log time, Remove logged time ", () => {
-
   const issueTitle = faker.lorem.words(4);
   const initialEstimationValue = 10;
   const updatedEstimationValue = 20;
@@ -21,7 +20,6 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
   });
 
   it("TC1-TC3:User adds, updates, and removes estimation Time to the issue", () => {
-
     createIssue(issueTitle);
     cy.wait(25000);
     cy.contains(issueTitle).click();
@@ -39,7 +37,6 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
   });
 
   it("TC4-TC5:User logs spent and remaining time and then removes logs to recently created issue", () => {
-    
     createIssue(issueTitle);
     cy.wait(25000);
     cy.contains(issueTitle).click();
@@ -48,7 +45,7 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
     removeLoggedTime();
     verifyLoggedTimeRemoved();
   });
-  
+
   // Helper functions
 
   const createIssue = (title) => {
@@ -126,12 +123,12 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
   const verifyTimeLogged = (timeSpent, timeRemaining) => {
     cy.get('[data-testid="icon:stopwatch"]').click();
     cy.get('[data-testid="modal:tracking"]')
-    .should("be.visible")
-    .within(() => {
-      cy.wait(1000);
-    cy.contains(timeSpent + "h logged").should("be.visible");
-    cy.contains(timeRemaining + "h remaining").should("be.visible");
-    cy.contains("button", "Done").click();
+      .should("be.visible")
+      .within(() => {
+        cy.wait(1000);
+        cy.contains(timeSpent + "h logged").should("be.visible");
+        cy.contains(timeRemaining + "h remaining").should("be.visible");
+        cy.contains("button", "Done").click();
         cy.wait(5000);
       });
   };
@@ -139,12 +136,12 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
   const removeLoggedTime = () => {
     cy.get('[data-testid="icon:stopwatch"]').click();
     cy.get('[data-testid="modal:tracking"]')
-    .should("be.visible")
-    .within(() => {
-      cy.wait(1000);
-    cy.get('[placeholder="Number"]').eq(0).click().clear();
-    cy.get('[placeholder="Number"]').eq(1).click().clear();
-    cy.contains("button", "Done").click();
+      .should("be.visible")
+      .within(() => {
+        cy.wait(1000);
+        cy.get('[placeholder="Number"]').eq(0).click().clear();
+        cy.get('[placeholder="Number"]').eq(1).click().clear();
+        cy.contains("button", "Done").click();
         cy.wait(5000);
       });
   };
@@ -152,12 +149,12 @@ describe("Time tracking - Add estimation, Update estimation, Remove estimation, 
   const verifyLoggedTimeRemoved = () => {
     cy.get('[data-testid="icon:stopwatch"]').click();
     cy.get('[data-testid="modal:tracking"]')
-    .should("be.visible")
-    .within(() => {
-      cy.wait(1000);
-    cy.contains("No time logged").should("be.visible");
-    cy.contains("button", "Done").click();
-    cy.wait(5000);
-  });
+      .should("be.visible")
+      .within(() => {
+        cy.wait(1000);
+        cy.contains("No time logged").should("be.visible");
+        cy.contains("button", "Done").click();
+        cy.wait(5000);
+      });
   };
 });
